@@ -1,0 +1,22 @@
+# Environment secrets — never commit these
+.env
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Database file (SQLite — use PostgreSQL in production)
+*.db
+*.sqlite3
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/

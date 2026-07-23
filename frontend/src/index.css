@@ -1,0 +1,180 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&family=Outfit:wght@400;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { font-family: 'Inter', system-ui, sans-serif; }
+
+body { 
+  color: #f8fafc;
+  background-color: #070b14;
+  background-image: radial-gradient(circle at 50% -20%, #1e293b 0%, #070b14 70%);
+  background-attachment: fixed;
+  scroll-behavior: smooth; 
+}
+
+/* ── Premium Glassmorphism ────────────────── */
+.glass-panel {
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* ── Refined Card System ────────────────── */
+.premium-card {
+  position: relative;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(99, 179, 237, 0.15);
+  border-radius: 1.5rem;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.premium-card:hover {
+  border-color: rgba(99, 179, 237, 0.4);
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px -10px rgba(6, 182, 212, 0.2);
+}
+
+/* ── Typography Enhancements ──────────────── */
+.heading-accent {
+  font-family: 'Playfair Display', serif;
+  letter-spacing: -0.02em;
+  background: linear-gradient(to right, #ffffff, #94a3b8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ── Interactive Elements ────────────────── */
+.btn-glow {
+  position: relative;
+  background: linear-gradient(135deg, #2563eb, #0891b2);
+  border-radius: 1rem;
+  font-weight: 800;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(8, 145, 178, 0.3);
+}
+
+.btn-glow:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 30px rgba(8, 145, 178, 0.5);
+}
+
+/* ── Timeline/Itinerary Styling ────────── */
+.timeline-line {
+  position: relative;
+}
+.timeline-line::before {
+  content: '';
+  position: absolute;
+  left: 1.25rem;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, #0891b2, transparent);
+}
+
+/* ── Scrollbar ───────────────────────────── */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #070b14; }
+::-webkit-scrollbar-thumb { 
+  background: #1e293b; 
+  border-radius: 4px; 
+  border: 2px solid #070b14;
+}
+::-webkit-scrollbar-thumb:hover { background: #334155; }
+
+/* ── Animation Library ───────────────────── */
+.animate-fade-up { animation: fadeInUp 0.6s ease-out forwards; }
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Hero Slideshow ──────────────────────── */
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 1.8s ease-in-out;
+}
+
+.hero-slide.active {
+  opacity: 1;
+  animation: kenBurns 8s ease-in-out forwards;
+}
+
+@keyframes kenBurns {
+  from { transform: scale(1);    background-position: center 40%; }
+  to   { transform: scale(1.08); background-position: center 60%; }
+}
+
+/* ── Hero Text Animations ────────────────── */
+@keyframes heroFadeUp {
+  from { opacity: 0; transform: translateY(32px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.hero-content > * {
+  opacity: 0;
+  animation: heroFadeUp 0.9s cubic-bezier(0.16,1,0.3,1) both;
+}
+.hero-content > *:nth-child(1) { animation-delay: 0.15s; }
+.hero-content > *:nth-child(2) { animation-delay: 0.35s; }
+.hero-content > *:nth-child(3) { animation-delay: 0.55s; }
+.hero-content > *:nth-child(4) { animation-delay: 0.75s; }
+.hero-content > *:nth-child(5) { animation-delay: 0.95s; }
+
+/* ── Slide Dot Indicators ────────────────── */
+.slide-dot {
+  height: 8px;
+  border-radius: 9999px;
+  background: rgba(255,255,255,0.35);
+  transition: all 0.4s ease;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+}
+.slide-dot.active {
+  width: 28px !important;
+  background: #f59e0b;
+}
+
+/* ── Gold Gradient Text ──────────────────── */
+.text-gold-gradient {
+  background: linear-gradient(90deg, #fbbf24, #f97316, #fb923c);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ── Shimmer badge ───────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+.badge-shimmer {
+  background: linear-gradient(90deg,
+    rgba(251,191,36,0.12) 0%,
+    rgba(251,191,36,0.32) 40%,
+    rgba(251,191,36,0.12) 80%
+  );
+  background-size: 200% auto;
+  animation: shimmer 3s linear infinite;
+  border: 1px solid rgba(251,191,36,0.3);
+}
+
+/* ── Outfit font for hero headings ──────── */
+.font-outfit { font-family: 'Outfit', sans-serif; }
+
+/* ── Float animation ─────────────────────── */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-12px); }
+}

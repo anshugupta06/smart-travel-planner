@@ -1,0 +1,12 @@
+# Environment secrets — never commit these
+.env
+.env.local
+.env.production
+
+# Build output
+dist/
+node_modules/
+
+# IDE
+.vscode/
+.idea/

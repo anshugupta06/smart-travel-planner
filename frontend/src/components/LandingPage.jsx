@@ -76,15 +76,105 @@ const TESTIMONIALS = [
 ]
 
 const BLOG_PREVIEWS = [
-  { tag: 'Travel Tips', title: '10 Things to Know Before Visiting Bali', img: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600&q=80', time: '5 min read' },
-  { tag: 'AI Travel', title: 'How AI Is Changing the Way We Plan Trips', img: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80', time: '4 min read' },
-  { tag: 'Budget Travel', title: 'Europe on ₹80,000: A Complete Guide', img: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=600&q=80', time: '7 min read' },
+  {
+    tag: 'Travel Tips',
+    title: '10 Things to Know Before Visiting Bali',
+    img: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600&q=80',
+    time: '5 min read',
+    content: `Bali is one of the world's most magical destinations — but a little preparation goes a long way. Here's what every first-time visitor should know:
+
+**1. Choose the right season.** Bali has two seasons — dry (April–October) is ideal for beaches and outdoor activities. The wet season (November–March) brings daily rain but fewer tourists and lush green scenery.
+
+**2. Respect temple etiquette.** Always wear a sarong and sash when entering temples. They're often available for rent at the entrance. Never point your feet at sacred objects.
+
+**3. Negotiate transport fares upfront.** Unlike metered taxis in cities, many Bali drivers quote fixed prices. Agree before you get in. Grab is available in major areas and is more transparent.
+
+**4. Try the local warungs.** These small family-owned restaurants serve authentic Balinese food at a fraction of tourist restaurant prices. Nasi goreng, mie goreng, and babi guling are must-tries.
+
+**5. Explore beyond Kuta.** Kuta is crowded and touristy. Ubud offers culture and rice terraces, Seminyak has upscale dining, Canggu is for digital nomads, and Nusa Penida has dramatic cliffs.
+
+**6. Carry cash.** While cards are accepted at hotels and larger restaurants, many small shops, markets, and temples only take cash. ATMs are widely available but use trusted bank ATMs.
+
+**7. Book accommodation early in peak season.** July–August and December–January see massive tourist surges. Book at least 2–3 months ahead for good villas.
+
+**8. Rent a scooter or hire a driver.** Public transport is minimal. Renting a scooter gives freedom but requires an international driving permit. A private driver for the day costs around ₹2,000–3,000 and is worth it.
+
+**9. Bali belly is real.** Stick to bottled water, avoid ice in street stalls, and carry rehydration salts. Your stomach needs a few days to adjust to local food.
+
+**10. The people are the destination.** Balinese culture is deeply spiritual. Festivals, ceremonies, and daily offerings are everywhere. Slow down, be present, and engage respectfully — it's what makes Bali unforgettable.`,
+  },
+  {
+    tag: 'AI Travel',
+    title: 'How AI Is Changing the Way We Plan Trips',
+    img: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80',
+    time: '4 min read',
+    content: `Travel planning has traditionally been a time-consuming process — hours spent on booking sites, forums, and spreadsheets. Artificial Intelligence is changing all of that.
+
+**From Search to Generation**
+Traditional travel planning means searching for information across dozens of websites. AI-powered planners generate a complete itinerary from a single prompt. Instead of "find hotels in Jaipur", you say "plan a 4-day moderate-budget trip to Jaipur for 2 people interested in history" — and get a fully structured plan in seconds.
+
+**Machine Learning for Smarter Recommendations**
+Modern AI travel tools use ML algorithms to rank attractions by tourist popularity, not just ratings. This means famous landmarks like Amber Fort or Hawa Mahal naturally surface above generic "local spots" that might have artificially inflated reviews.
+
+**Route Optimization**
+The Nearest-Neighbor heuristic — a classical computer science algorithm — is now applied to daily itinerary planning. Instead of visiting attractions in a random order, AI calculates the most efficient route so you spend less time in transit and more time exploring.
+
+**Budget Intelligence**
+AI can now estimate realistic trip costs based on destination type, travel style, and group size. A budget trip to Goa costs fundamentally differently from a luxury trip to Dubai — and modern systems model these differences across accommodation, food, transport, and activities.
+
+**Real-Time Context**
+Integration with live APIs means AI itineraries can now factor in current weather, real hotel availability near your arrival point, and live transport schedules — making recommendations that are not just smart but also practical.
+
+**The Human Element**
+Despite all this, the best AI travel tools don't replace the human joy of exploration — they amplify it. By handling the logistics, they free you to focus on the experiences that make travel meaningful.`,
+  },
+  {
+    tag: 'Budget Travel',
+    title: 'Europe on ₹80,000: A Complete Guide',
+    img: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=600&q=80',
+    time: '7 min read',
+    content: `Travelling Europe on a tight budget sounds impossible — but with the right strategy, ₹80,000 (roughly €850) can cover 10–12 days across multiple countries. Here's how.
+
+**Choose Budget-Friendly Countries**
+Western Europe (Paris, London, Amsterdam) is expensive. Eastern Europe (Prague, Budapest, Krakow, Warsaw) offers the same historical richness at 40–60% lower cost. A hostel dorm in Prague costs €10–15/night vs €40–60 in Paris.
+
+**Fly Smart**
+Book flights 6–8 weeks in advance. Use budget airlines like Ryanair, Wizz Air, and EasyJet for intra-Europe travel. Flying into Frankfurt or Vienna and taking trains/buses onward is often cheaper than direct flights.
+
+**Sleep in Hostels**
+Europe has a world-class hostel network. Generator, Zostel, and local independent hostels offer clean dorms with free breakfast for €12–20/night. Book on Hostelworld or Booking.com.
+
+**Eat Like a Local**
+Avoid tourist-strip restaurants. Look for daily lunch menus (menu del día in Spain, dagschotel in Belgium) — a 3-course meal for €8–12. Supermarket meals, street food, and food markets keep costs to €10–15/day for food.
+
+**Free Attractions**
+Most of Europe's greatest attractions are free or low-cost:
+- Rome: Colosseum area walk, Trevi Fountain, Vatican Square
+- Paris: Louvre (free first Sunday), Eiffel Tower exterior, Sacré-Cœur
+- Prague: Old Town Square, Charles Bridge, castle exterior
+- Budapest: Parliament exterior, Fisherman's Bastion, thermal bath entry ~€15
+
+**Use Rail Passes Wisely**
+An Interrail Global Pass for 5 days in a month costs ~€185 — worth it if crossing 3+ countries. For shorter itineraries, point-to-point tickets on Trainline or Omio are often cheaper.
+
+**Sample 10-Day Budget (₹80,000 / €850)**
+- Flights: €250 (India–Europe return)
+- Accommodation: €140 (10 nights hostel)
+- Food: €120 (€12/day)
+- Transport: €180 (rail + buses)
+- Attractions: €80
+- Miscellaneous: €80
+**Total: €850**
+
+Europe on a budget isn't about sacrifice — it's about priorities. Spend on the experiences, save on the logistics.`,
+  },
 ]
 
 export default function LandingPage({ onStartPlanning }) {
   const { openLogin, openSignup, user } = useAuth()
   const [currentSlide, setCurrentSlide] = useState(0)
   const [activeFeature, setActiveFeature] = useState(null)
+  const [activeBlog, setActiveBlog] = useState(null)
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -550,7 +640,8 @@ export default function LandingPage({ onStartPlanning }) {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {BLOG_PREVIEWS.map((b, i) => (
-              <div key={i} className="group rounded-3xl overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-2"
+              <div key={i} onClick={() => setActiveBlog(b)}
+                className="group rounded-3xl overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-2"
                 style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
                 <div className="relative overflow-hidden" style={{ height: '180px' }}>
                   <img src={b.img} alt={b.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
@@ -562,7 +653,7 @@ export default function LandingPage({ onStartPlanning }) {
                   <h3 className="font-outfit font-bold text-white text-lg mb-3 leading-snug group-hover:text-amber-300 transition-colors">{b.title}</h3>
                   <div className="flex items-center justify-between">
                     <span className="text-white/35 text-xs">{b.time}</span>
-                    <span className="text-amber-400 text-xs font-bold">Read →</span>
+                    <span className="text-amber-400 text-xs font-bold group-hover:gap-2 flex items-center gap-1 transition-all">Read →</span>
                   </div>
                 </div>
               </div>
@@ -570,6 +661,60 @@ export default function LandingPage({ onStartPlanning }) {
           </div>
         </div>
       </section>
+
+      {/* ── BLOG ARTICLE MODAL ─────────────────────────────── */}
+      {activeBlog && (
+        <div className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-10 overflow-y-auto"
+          onClick={() => setActiveBlog(null)}>
+          <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(8px)' }} />
+          <div className="relative w-full max-w-3xl rounded-3xl overflow-hidden mb-8"
+            style={{ background: 'rgba(6,9,24,0.98)', border: '1px solid rgba(245,158,11,0.2)' }}
+            onClick={e => e.stopPropagation()}>
+            {/* Hero image */}
+            <div className="relative h-56 overflow-hidden">
+              <img src={activeBlog.img} alt={activeBlog.title} className="w-full h-full object-cover" />
+              <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(6,9,24,1) 0%, rgba(6,9,24,0.3) 60%, transparent 100%)' }} />
+              <button onClick={() => setActiveBlog(null)}
+                className="absolute top-4 right-4 w-9 h-9 rounded-xl flex items-center justify-center text-white/70 hover:text-white transition-colors"
+                style={{ background: 'rgba(6,9,24,0.7)', backdropFilter: 'blur(8px)' }}>✕</button>
+              <span className="absolute bottom-4 left-6 text-xs font-bold px-3 py-1 rounded-full text-white"
+                style={{ background: 'rgba(245,158,11,0.85)' }}>{activeBlog.tag}</span>
+            </div>
+            {/* Content */}
+            <div className="px-8 py-6">
+              <h2 className="font-outfit font-black text-white text-2xl md:text-3xl mb-2">{activeBlog.title}</h2>
+              <p className="text-amber-400/60 text-xs font-medium mb-6">⏱ {activeBlog.time}</p>
+              <div className="prose-custom space-y-4">
+                {activeBlog.content.split('\n\n').map((para, i) => {
+                  if (!para.trim()) return null
+                  // Bold headings like **text**
+                  const isHeading = para.startsWith('**') && para.includes('**')
+                  const rendered = para.split(/\*\*(.*?)\*\*/g).map((part, j) =>
+                    j % 2 === 1
+                      ? <strong key={j} className="text-amber-300 font-bold">{part}</strong>
+                      : <span key={j}>{part}</span>
+                  )
+                  return (
+                    <p key={i} className={`leading-relaxed ${isHeading ? 'text-white/90 text-base' : 'text-white/55 text-sm'}`}>
+                      {rendered}
+                    </p>
+                  )
+                })}
+              </div>
+              <div className="mt-8 pt-6 flex items-center justify-between"
+                style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}>
+                <button onClick={() => setActiveBlog(null)}
+                  className="text-white/40 text-sm hover:text-white transition-colors">← Back to Blog</button>
+                <button onClick={user ? onStartPlanning : openSignup}
+                  className="text-sm px-6 py-2.5 rounded-xl font-black text-white transition-all hover:scale-105"
+                  style={{ background: 'linear-gradient(135deg,#f59e0b,#ea580c)' }}>
+                  Plan Your Trip Now →
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ── CTA BANNER ───────────────────────────────────────── */}
       <section className="relative py-32 px-6 text-center overflow-hidden">

@@ -11,7 +11,6 @@ import BestTimeCalendar from './BestTimeCalendar'
 import { OfflineSaveBanner } from './OfflineMode'
 import ShareTrip from './ShareTrip'
 import { useState } from 'react'
-
 const fmt = (n) => `₹${Number(n).toLocaleString('en-IN')}`
 const TRAVEL_EMOJI = { budget: '🎒', moderate: '🌟', luxury: '💎' }
 
@@ -83,6 +82,7 @@ export default function ItineraryResult({ data, onNewTrip }) {
   const [heroLoaded, setHeroLoaded] = useState(false)
   const [showPacking, setShowPacking]     = useState(false)
   const [showCompare, setShowCompare]     = useState(false)
+  const [sideOpen,   setSideOpen]         = useState(false)
   const heroImg = getHeroImage(destination)
 
   const handlePDF = () => {
@@ -114,6 +114,89 @@ export default function ItineraryResult({ data, onNewTrip }) {
       {showPacking && <PackingList tripData={data} onClose={() => setShowPacking(false)} />}
       {/* Budget comparison modal */}
       {showCompare && <TripComparison tripData={data} onClose={() => setShowCompare(false)} />}
+
+      {/* ── SIDE PANEL OVERLAY ─────────────────────────────── */}
+      {/* Backdrop */}
+      {sideOpen && (
+        <div
+          className="fixed inset-0 z-40"
+          style={{ background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(4px)' }}
+          onClick={() => setSideOpen(false)}
+        />
+      )}
+      {/* Slide-in panel */}
+      <div
+        className="fixed top-0 left-0 z-50 h-full overflow-y-auto transition-transform duration-300 ease-out no-print"
+        style={{
+          width: '600px',
+          transform: sideOpen ? 'translateX(0)' : 'translateX(-100%)',
+          background: 'rgba(6,9,24,0.97)',
+          borderRight: '1px solid rgba(255,255,255,0.08)',
+          boxShadow: '8px 0 40px rgba(0,0,0,0.6)',
+        }}
+      >
+        {/* Panel header */}
+        <div className="flex items-center justify-between px-5 py-4 sticky top-0 z-10"
+          style={{ background: 'rgba(6,9,24,0.97)', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+          <div>
+            <div className="font-outfit font-black text-white text-base">{destination}</div>
+            <div className="text-white/35 text-xs mt-0.5">Trip Tools</div>
+          </div>
+          <button onClick={() => setSideOpen(false)}
+            className="w-8 h-8 rounded-xl flex items-center justify-center text-white/50 hover:text-white transition-colors"
+            style={{ background: 'rgba(255,255,255,0.07)' }}>✕</button>
+        </div>
+
+        {/* Panel content */}
+        <div className="px-5 py-5 space-y-5">
+
+          {/* Divider */}
+          <div style={{ height: '1px', background: 'rgba(255,255,255,0.06)' }} />
+
+          {/* Travel Tips */}
+          {travel_tips?.length > 0 && (
+            <div>
+              <div className="text-amber-400 text-xs font-black uppercase tracking-widest mb-3">💡 Travel Tips</div>
+              <div className="space-y-2">
+                {travel_tips.map((tip, i) => (
+                  <div key={i} className="flex items-start gap-2.5 p-3 rounded-xl"
+                    style={{ background: 'rgba(245,158,11,0.05)', border: '1px solid rgba(245,158,11,0.1)' }}>
+                    <span className="w-5 h-5 rounded-lg flex items-center justify-center text-[10px] font-black text-white flex-shrink-0"
+                      style={{ background: 'linear-gradient(135deg,#f59e0b,#ea580c)' }}>{i+1}</span>
+                    <p className="text-white/55 text-xs leading-relaxed">{tip}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Divider */}
+          <div style={{ height: '1px', background: 'rgba(255,255,255,0.06)' }} />
+
+          {/* Currency */}
+          <CurrencyWidget budgetINR={budget_provided} destination={destination} />
+
+          {/* Divider */}
+          <div style={{ height: '1px', background: 'rgba(255,255,255,0.06)' }} />
+
+          {/* Best Time */}
+          <BestTimeCalendar destination={destination} />
+
+          {/* Divider */}
+          <div style={{ height: '1px', background: 'rgba(255,255,255,0.06)' }} />
+
+          {/* Share + Offline */}
+          <ShareTrip tripId={data?.id || null} destination={destination} />
+          <OfflineSaveBanner tripData={data} />
+
+          {/* Divider */}
+          <div style={{ height: '1px', background: 'rgba(255,255,255,0.06)' }} />
+
+          {/* Rating */}
+          <TripRating tripId={data?.id || null} destination={destination} />
+
+        </div>
+      </div>
 
       {/* ════════════════════════════════════════════════════
           FULL-PAGE FIXED BACKGROUND — blurred destination photo
@@ -160,31 +243,44 @@ export default function ItineraryResult({ data, onNewTrip }) {
 
         <div className="relative z-10 max-w-7xl mx-auto px-6 pt-14 pb-20">
           {/* Actions row */}
-          <div className="flex justify-end gap-2 mb-12 no-print">
-            {[['📄 PDF', handlePDF], ['🖨️ Print', () => window.print()]].map(([label, fn]) => (
-              <button key={label} onClick={fn}
+          <div className="flex items-center justify-between gap-2 mb-12 no-print">
+            {/* Hamburger — opens side panel */}
+            <button
+              onClick={() => setSideOpen(true)}
+              className="flex flex-col justify-center items-center gap-1.5 w-11 h-11 rounded-xl transition-all hover:bg-white/10"
+              style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)' }}
+              title="Trip Tools"
+            >
+              <span className="block w-5 h-0.5 rounded-full bg-white/70" />
+              <span className="block w-5 h-0.5 rounded-full bg-white/70" />
+              <span className="block w-5 h-0.5 rounded-full bg-white/70" />
+            </button>
+
+            {/* Right side actions */}
+            <div className="flex items-center gap-2">
+              {[['📄 PDF', handlePDF], ['🖨️ Print', () => window.print()]].map(([label, fn]) => (
+                <button key={label} onClick={fn}
+                  className="text-white/60 hover:text-white text-sm font-bold px-4 py-2 rounded-xl transition-all"
+                  style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)' }}>
+                  {label}
+                </button>
+              ))}
+              <button onClick={() => setShowPacking(true)}
                 className="text-white/60 hover:text-white text-sm font-bold px-4 py-2 rounded-xl transition-all"
                 style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)' }}>
-                {label}
+                🎒 Pack
               </button>
-            ))}
-            <button
-              onClick={() => setShowPacking(true)}
-              className="text-white/60 hover:text-white text-sm font-bold px-4 py-2 rounded-xl transition-all"
-              style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)' }}>
-              🎒 Pack
-            </button>
-            <button
-              onClick={() => setShowCompare(true)}
-              className="text-white/60 hover:text-white text-sm font-bold px-4 py-2 rounded-xl transition-all"
-              style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)' }}>
-              ⚖️ Compare
-            </button>
-            <button onClick={onNewTrip}
-              className="text-sm px-5 py-2 rounded-xl font-black text-white transition-all hover:scale-105"
-              style={{ background: 'linear-gradient(135deg,#f59e0b,#ea580c)', boxShadow: '0 0 16px rgba(245,158,11,0.4)' }}>
-              + New Trip
-            </button>
+              <button onClick={() => setShowCompare(true)}
+                className="text-white/60 hover:text-white text-sm font-bold px-4 py-2 rounded-xl transition-all"
+                style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)' }}>
+                ⚖️ Compare
+              </button>
+              <button onClick={onNewTrip}
+                className="text-sm px-5 py-2 rounded-xl font-black text-white transition-all hover:scale-105"
+                style={{ background: 'linear-gradient(135deg,#f59e0b,#ea580c)', boxShadow: '0 0 16px rgba(245,158,11,0.4)' }}>
+                + New Trip
+              </button>
+            </div>
           </div>
 
           {/* Route breadcrumb */}
@@ -291,37 +387,13 @@ export default function ItineraryResult({ data, onNewTrip }) {
               )}
 
               {/* ── TRAVEL TIPS ─────────────────────────────────── */}
-              {travel_tips?.length > 0 && (
-                <section className="p-8 rounded-3xl"
-                  style={{ background: 'rgba(6,9,24,0.6)', border: '1px solid rgba(245,158,11,0.1)', backdropFilter: 'blur(20px)' }}>
-                  <div className="inline-flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full mb-4"
-                    style={{ background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.2)' }}>
-                    💡 Insider Tips
-                  </div>
-                  <h2 className="font-outfit font-black text-white text-3xl mb-6">Travel Tips for {destination}</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {travel_tips.map((tip, i) => (
-                      <div key={i} className="flex items-start gap-4 p-5 rounded-2xl transition-all hover:-translate-y-0.5"
-                        style={{ background: 'rgba(245,158,11,0.05)', border: '1px solid rgba(245,158,11,0.12)' }}>
-                        <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white text-xs font-black flex-shrink-0"
-                          style={{ background: 'linear-gradient(135deg,#f59e0b,#ea580c)' }}>{i + 1}</div>
-                        <p className="text-white/60 text-sm leading-relaxed">{tip}</p>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-              )}
+              {/* Moved to side panel (☰ menu) */}
 
               {/* ── CURRENCY + BEST TIME + OFFLINE + SHARE ──────── */}
-              <div className="space-y-5">
-                <CurrencyWidget budgetINR={budget_provided} destination={destination} />
-                <BestTimeCalendar destination={destination} />
-                <OfflineSaveBanner tripData={data} />
-                <ShareTrip tripId={data?.id || null} destination={destination} />
-              </div>
+              {/* These have moved to the side panel (☰ menu) */}
 
               {/* ── TRIP RATING ──────────────────────────────────── */}
-              <TripRating tripId={data?.id || null} destination={destination} />
+              {/* Moved to side panel */}
 
               {/* ── FOOTER CTA ──────────────────────────────────── */}
               <div className="no-print">

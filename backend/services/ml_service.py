@@ -1910,7 +1910,9 @@ def predict_budget(
                     "summary": f"₹{savings:,.0f} to spare — consider upgrading!" if savings > 1000 else "",
                 },
             }
-            primary = feasible
+            # NOTE: do NOT overwrite primary here — primary must stay as the
+            # requested_tier costs so the compare endpoint gets correct per-tier values.
+            # budget_fit uses feasible for metadata only.
             print(f"[Budget] Feasible at tier='{actual_tier}' → ₹{adjusted_cost:,.0f} | savings=₹{savings:,.0f}")
 
         else:

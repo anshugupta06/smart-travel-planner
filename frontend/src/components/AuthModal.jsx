@@ -72,13 +72,26 @@ export default function AuthModal() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
+
     if (!form.email || !form.password) { setError('All fields are required'); return }
+    if (!isLogin && !form.name)        { setError('Full name is required'); return }
     if (!isLogin && form.password !== form.confirm) { setError('Passwords do not match'); return }
-    if (!isLogin && !form.name) { setError('Name is required'); return }
+    if (!isLogin && form.password.length < 6) { setError('Password must be at least 6 characters'); return }
+
     setLoading(true)
-    await new Promise(r => setTimeout(r, 600))
-    if (isLogin) login(form.email, form.name)
-    else signup(form.email, form.name, form.password)
+    await new Promise(r => setTimeout(r, 500))
+
+    let result
+    if (isLogin) {
+      result = login(form.email, form.name, form.password)
+    } else {
+      result = signup(form.email, form.name, form.password)
+    }
+
+    if (result?.error) {
+      setError(result.error)
+    }
+
     setLoading(false)
   }
 

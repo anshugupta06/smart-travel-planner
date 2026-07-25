@@ -1,6 +1,83 @@
 import { useAuth } from '../context/AuthContext'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import FeatureDetail from './FeatureDetail'
+
+// ── User dropdown for the landing page navbar ─────────────────────────────────
+function LandingUserMenu({ user, onStartPlanning }) {
+  const { logout } = useAuth()
+  const [open, setOpen] = useState(false)
+  const ref = useRef(null)
+
+  useEffect(() => {
+    if (!open) return
+    const handle = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false) }
+    document.addEventListener('mousedown', handle)
+    return () => document.removeEventListener('mousedown', handle)
+  }, [open])
+
+  return (
+    <div className="flex items-center gap-3">
+      {/* User avatar button — opens dropdown */}
+      <div className="relative" ref={ref}>
+        <button
+          onClick={() => setOpen(o => !o)}
+          className="flex items-center gap-2 px-3 py-2 rounded-xl transition-all hover:bg-white/10"
+          style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)' }}
+        >
+          <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-black text-white flex-shrink-0"
+            style={{ background: 'linear-gradient(135deg,#f59e0b,#ea580c)' }}>
+            {user.avatar?.startsWith('http')
+              ? <img src={user.avatar} alt={user.name} className="w-full h-full object-cover rounded-full" referrerPolicy="no-referrer" />
+              : (user.avatar || user.name?.[0]?.toUpperCase() || '?')}
+          </div>
+          <span className="text-white text-sm font-semibold hidden sm:block max-w-[100px] truncate">{user.name}</span>
+          <span className="text-white/40 text-xs ml-1">{open ? '▲' : '▼'}</span>
+        </button>
+
+        {/* Dropdown */}
+        {open && (
+          <div
+            className="absolute right-0 top-full mt-2 w-52 rounded-2xl shadow-2xl py-2 z-50"
+            style={{ background: 'rgba(10,15,32,0.97)', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)' }}
+          >
+            {/* User info */}
+            <div className="px-4 py-3" style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+              <div className="font-bold text-white text-sm truncate">{user.name}</div>
+              <div className="text-white/35 text-xs truncate mt-0.5">{user.email}</div>
+            </div>
+
+            {/* Plan a trip */}
+            <button
+              onClick={() => { setOpen(false); onStartPlanning() }}
+              className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-white/65 font-medium transition-all hover:text-amber-300 hover:bg-white/5"
+            >
+              <span>🚀</span> Plan a Trip
+            </button>
+
+            {/* Sign out */}
+            <div style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }} className="mt-1 pt-1">
+              <button
+                onClick={() => { setOpen(false); logout() }}
+                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-400/80 font-semibold transition-all hover:text-red-400 hover:bg-red-500/10"
+              >
+                <span>👋</span> Sign Out
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Plan a Trip CTA button */}
+      <button
+        onClick={onStartPlanning}
+        className="text-sm font-black px-5 py-2.5 rounded-xl text-white transition-all hover:scale-105 hover:-translate-y-0.5"
+        style={{ background: 'linear-gradient(135deg,#f59e0b,#ea580c)', boxShadow: '0 0 16px rgba(245,158,11,0.4)' }}
+      >
+        🚀 Plan a Trip
+      </button>
+    </div>
+  )
+}
 
 const HERO_SLIDES = [
   { img: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1600&q=80', label: 'Swiss Alps, Switzerland' },
@@ -224,22 +301,8 @@ export default function LandingPage({ onStartPlanning }) {
           {/* Auth buttons */}
           <div className="flex items-center gap-2">
             {user ? (
-              /* Logged-in state */
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-2 px-3 py-2 rounded-xl"
-                  style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)' }}>
-                  <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-black text-white"
-                    style={{ background: 'linear-gradient(135deg,#f59e0b,#ea580c)' }}>
-                    {user.name?.[0]?.toUpperCase() || '?'}
-                  </div>
-                  <span className="text-white text-sm font-semibold hidden sm:block max-w-[100px] truncate">{user.name}</span>
-                </div>
-                <button onClick={onStartPlanning}
-                  className="text-sm font-black px-5 py-2.5 rounded-xl text-white transition-all hover:scale-105 hover:-translate-y-0.5"
-                  style={{ background: 'linear-gradient(135deg,#f59e0b,#ea580c)', boxShadow: '0 0 16px rgba(245,158,11,0.4)' }}>
-                  🚀 Plan a Trip
-                </button>
-              </div>
+              /* Logged-in state — dropdown with sign out */
+              <LandingUserMenu user={user} onStartPlanning={onStartPlanning} />
             ) : (
               /* Logged-out state — prominent Sign In + Sign Up */
               <>

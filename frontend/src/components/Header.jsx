@@ -1,9 +1,22 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '../context/AuthContext'
 
 export default function Header({ onNewTrip, showNewTrip, onHome, onHistory, onDashboard }) {
   const { user, logout, openLogin, openSignup } = useAuth()
   const [dropOpen, setDropOpen] = useState(false)
+  const dropRef = useRef(null)
+
+  // Close dropdown when clicking anywhere outside it
+  useEffect(() => {
+    if (!dropOpen) return
+    const handle = (e) => {
+      if (dropRef.current && !dropRef.current.contains(e.target)) {
+        setDropOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handle)
+    return () => document.removeEventListener('mousedown', handle)
+  }, [dropOpen])
 
   return (
     <header className="sticky top-0 z-40 text-white"
@@ -45,7 +58,7 @@ export default function Header({ onNewTrip, showNewTrip, onHome, onHistory, onDa
           )}
 
           {user ? (
-            <div className="relative">
+            <div className="relative" ref={dropRef}>
               <button onClick={() => setDropOpen(!dropOpen)}
                 className="flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all"
                 style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)' }}>
@@ -63,8 +76,7 @@ export default function Header({ onNewTrip, showNewTrip, onHome, onHistory, onDa
 
               {dropOpen && (
                 <div className="absolute right-0 top-full mt-2 w-56 rounded-2xl shadow-2xl py-2 z-50 overflow-hidden"
-                  style={{ background: 'rgba(10,15,32,0.97)', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)' }}
-                  onClick={() => setDropOpen(false)}>
+                  style={{ background: 'rgba(10,15,32,0.97)', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)' }}>
                   <div className="px-4 py-3 mb-1" style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
                     <div className="font-bold text-white text-sm truncate">{user.name}</div>
                     <div className="text-white/35 text-xs truncate mt-0.5">{user.email}</div>
@@ -74,13 +86,13 @@ export default function Header({ onNewTrip, showNewTrip, onHome, onHistory, onDa
                     { icon: '📋', label: 'My Trips',      action: onHistory },
                     { icon: '📊', label: 'Analytics',     action: onDashboard },
                   ].map(item => (
-                    <button key={item.label} onClick={item.action}
+                    <button key={item.label} onClick={() => { setDropOpen(false); item.action?.() }}
                       className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-white/65 font-medium transition-all hover:text-amber-300 hover:bg-white/5">
                       <span>{item.icon}</span> {item.label}
                     </button>
                   ))}
                   <div style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }} className="mt-1 pt-1">
-                    <button onClick={logout}
+                    <button onClick={() => { setDropOpen(false); logout() }}
                       className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-400/80 font-semibold transition-all hover:text-red-400 hover:bg-red-500/10">
                       <span>👋</span> Sign Out
                     </button>

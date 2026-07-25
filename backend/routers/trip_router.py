@@ -876,6 +876,38 @@ async def compare_budgets(request: TripRequest):
             transport_options=transport_options_raw,
             user_budget=request.budget,
         )
+
+        # Budget tips must reflect the current tier being displayed,
+        # not the "cheapest fitting tier" that predict_budget resolves internally.
+        intl_cats = {
+            "europe_expensive", "europe_moderate", "europe_budget",
+            "north_america", "australia", "east_asia", "east_asia_expensive",
+            "middle_east", "luxury_island",
+        }
+        dest_cat = data.get("destination_category", "")
+        is_intl  = dest_cat in intl_cats
+
+        if tier == "budget":
+            tier_tips = [
+                "Book hostels or guesthouses — check Hostelworld or Booking.com",
+                "Eat at local markets and street stalls — authentic and affordable",
+                "Use public transport: metro, bus, or shared rides",
+            ]
+            if is_intl:
+                tier_tips.insert(0, "Travel in shoulder season for 30–40% lower costs")
+        elif tier == "moderate":
+            tier_tips = [
+                "Book mid-range hotels mid-week for 15–20% savings",
+                "Mix restaurant dining with local street food",
+                "Use ride-hailing apps (Uber/Grab/Ola) for local travel",
+            ]
+        else:
+            tier_tips = [
+                "Book luxury hotels and flights 4–6 weeks in advance",
+                "Hire a private car or driver for full-day sightseeing",
+                "Pre-book premium experiences and guided tours",
+            ]
+
         tiers[tier] = {
             "tier":              tier,
             "total_estimated":   data["total_estimated"],
@@ -885,9 +917,9 @@ async def compare_budgets(request: TripRequest):
             "transport":         data["transport"],
             "activities":        data["activities"],
             "misc":              data["misc"],
-            "fits_budget":       data.get("budget_fit", {}).get("fits_budget", False),
+            "fits_budget":       data["total_estimated"] <= request.budget if request.budget > 0 else True,
             "transport_mode":    data.get("transport_mode", ""),
-            "budget_tips":       data.get("budget_tips", [])[:2],
+            "budget_tips":       tier_tips[:2],
         }
 
     return {

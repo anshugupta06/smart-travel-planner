@@ -299,17 +299,17 @@ export default function LandingPage({ onStartPlanning }) {
           </div>
 
           {/* Auth buttons */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             {user ? (
               /* Logged-in state — dropdown with sign out */
               <LandingUserMenu user={user} onStartPlanning={onStartPlanning} />
             ) : (
               /* Logged-out state — prominent Sign In + Sign Up */
               <>
-                {/* Log In — outlined */}
+                {/* Log In — hidden on very small screens */}
                 <button
                   onClick={openLogin}
-                  className="text-sm font-bold px-5 py-2.5 rounded-xl text-white transition-all hover:text-amber-300 hover:border-amber-400/50"
+                  className="hidden sm:block text-sm font-bold px-4 py-2 rounded-xl text-white transition-all hover:text-amber-300"
                   style={{
                     background: 'rgba(255,255,255,0.07)',
                     border: '1px solid rgba(255,255,255,0.18)',
@@ -318,15 +318,15 @@ export default function LandingPage({ onStartPlanning }) {
                   Log In
                 </button>
 
-                {/* Sign Up — filled amber */}
+                {/* Sign Up — always visible */}
                 <button
                   onClick={openSignup}
-                  className="text-sm font-black px-5 py-2.5 rounded-xl text-white transition-all hover:scale-105 hover:-translate-y-0.5"
+                  className="text-xs sm:text-sm font-black px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl text-white transition-all hover:scale-105"
                   style={{
                     background: 'linear-gradient(135deg,#f59e0b,#ea580c)',
                     boxShadow: '0 0 18px rgba(245,158,11,0.45)',
                   }}>
-                  Sign Up Free ✨
+                  Sign Up ✨
                 </button>
               </>
             )}

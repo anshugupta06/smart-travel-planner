@@ -69,32 +69,32 @@ export default function TopPlacesCard({ places, destination }) {
   return (
     <div>
       {/* Section header */}
-      <div className="flex items-end justify-between mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6 sm:mb-8">
         <div>
           <div className="inline-flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full mb-3"
             style={{ background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.2)' }}>
             📍 AI Ranked
           </div>
-          <h2 className="font-outfit font-black text-white text-4xl md:text-5xl">
+          <h2 className="font-outfit font-black text-white text-3xl md:text-5xl">
             Must-Visit Places in <span className="text-gold-gradient">{destination}</span>
           </h2>
           <p className="text-white/35 mt-2 text-sm">Click a place to locate it on the map · Ranked by AI</p>
         </div>
-        <div className="hidden md:flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-2 flex-shrink-0">
           {/* Restaurant toggle */}
           <button
             onClick={() => setShowRestaurants(r => !r)}
-            className="flex items-center gap-2 text-sm font-bold px-4 py-2.5 rounded-xl text-white transition-all hover:-translate-y-0.5"
+            className="flex items-center gap-2 text-xs sm:text-sm font-bold px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-white transition-all hover:-translate-y-0.5"
             style={{
               background: showRestaurants ? 'rgba(251,146,60,0.2)' : 'rgba(255,255,255,0.07)',
               border: showRestaurants ? '1px solid rgba(251,146,60,0.4)' : '1px solid rgba(255,255,255,0.1)',
             }}>
-            🍽️ {showRestaurants ? 'Hide Restaurants' : 'Nearby Food'}
+            🍽️ <span className="hidden sm:inline">{showRestaurants ? 'Hide' : 'Nearby'} </span>Food
           </button>
           <a href={showRestaurants ? allRestaurantsUrl : allMapUrl} target="_blank" rel="noopener noreferrer"
-            className="flex items-center gap-2 text-sm font-bold px-5 py-2.5 rounded-xl text-white transition-all hover:-translate-y-0.5"
+            className="flex items-center gap-2 text-xs sm:text-sm font-bold px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl text-white transition-all hover:-translate-y-0.5"
             style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)' }}>
-            🗺️ Open All in Maps
+            🗺️ <span className="hidden sm:inline">Open All in </span>Maps
           </a>
         </div>
       </div>
@@ -194,7 +194,7 @@ export default function TopPlacesCard({ places, destination }) {
 
           {/* Map embed */}
           <div className="rounded-3xl overflow-hidden relative"
-            style={{ height: '500px', border: '1px solid rgba(255,255,255,0.08)', boxShadow: '0 8px 40px rgba(0,0,0,0.5)' }}>
+            style={{ height: 'clamp(280px, 40vw, 500px)', border: '1px solid rgba(255,255,255,0.08)', boxShadow: '0 8px 40px rgba(0,0,0,0.5)' }}>
             <iframe
               key={showRestaurants ? 'restaurants' : activePlace}
               title={showRestaurants ? 'Restaurants Map' : 'Place Map'}

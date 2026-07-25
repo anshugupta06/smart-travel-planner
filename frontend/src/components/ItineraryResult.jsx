@@ -124,11 +124,11 @@ export default function ItineraryResult({ data, onNewTrip }) {
           onClick={() => setSideOpen(false)}
         />
       )}
-      {/* Slide-in panel */}
+      {/* Slide-in panel — full width on mobile, 600px on desktop */}
       <div
         className="fixed top-0 left-0 z-50 h-full overflow-y-auto transition-transform duration-300 ease-out no-print"
         style={{
-          width: '600px',
+          width: 'min(600px, 100vw)',
           transform: sideOpen ? 'translateX(0)' : 'translateX(-100%)',
           background: 'rgba(6,9,24,0.97)',
           borderRight: '1px solid rgba(255,255,255,0.08)',
@@ -149,6 +149,22 @@ export default function ItineraryResult({ data, onNewTrip }) {
 
         {/* Panel content */}
         <div className="px-5 py-5 space-y-5">
+
+          {/* Mobile-only quick actions (hidden on sm+ where top bar shows them) */}
+          <div className="grid grid-cols-2 gap-2 sm:hidden">
+            {[
+              { icon: '📄', label: 'PDF', action: handlePDF },
+              { icon: '🖨️', label: 'Print', action: () => window.print() },
+              { icon: '🎒', label: 'Pack List', action: () => { setSideOpen(false); setShowPacking(true) } },
+              { icon: '⚖️', label: 'Compare', action: () => { setSideOpen(false); setShowCompare(true) } },
+            ].map(item => (
+              <button key={item.label} onClick={item.action}
+                className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold text-white/70 hover:text-white transition-all hover:bg-white/10"
+                style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <span>{item.icon}</span> {item.label}
+              </button>
+            ))}
+          </div>
 
           {/* Divider */}
           <div style={{ height: '1px', background: 'rgba(255,255,255,0.06)' }} />
@@ -241,13 +257,13 @@ export default function ItineraryResult({ data, onNewTrip }) {
         <div className="absolute bottom-24 left-8 w-56 h-56 rounded-full blur-3xl opacity-15 pointer-events-none"
           style={{ background: 'radial-gradient(circle,#a78bfa,transparent)' }} />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 pt-14 pb-20">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-16 sm:pb-20">
           {/* Actions row */}
           <div className="flex items-center justify-between gap-2 mb-12 no-print">
             {/* Hamburger — opens side panel */}
             <button
               onClick={() => setSideOpen(true)}
-              className="flex flex-col justify-center items-center gap-1.5 w-11 h-11 rounded-xl transition-all hover:bg-white/10"
+              className="flex flex-col justify-center items-center gap-1.5 w-11 h-11 rounded-xl transition-all hover:bg-white/10 flex-shrink-0"
               style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)' }}
               title="Trip Tools"
             >
@@ -256,27 +272,27 @@ export default function ItineraryResult({ data, onNewTrip }) {
               <span className="block w-5 h-0.5 rounded-full bg-white/70" />
             </button>
 
-            {/* Right side actions */}
+            {/* Right side actions — PDF/Print/Pack/Compare hidden on mobile */}
             <div className="flex items-center gap-2">
               {[['📄 PDF', handlePDF], ['🖨️ Print', () => window.print()]].map(([label, fn]) => (
                 <button key={label} onClick={fn}
-                  className="text-white/60 hover:text-white text-sm font-bold px-4 py-2 rounded-xl transition-all"
+                  className="hidden sm:block text-white/60 hover:text-white text-sm font-bold px-4 py-2 rounded-xl transition-all"
                   style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)' }}>
                   {label}
                 </button>
               ))}
               <button onClick={() => setShowPacking(true)}
-                className="text-white/60 hover:text-white text-sm font-bold px-4 py-2 rounded-xl transition-all"
+                className="hidden sm:block text-white/60 hover:text-white text-sm font-bold px-4 py-2 rounded-xl transition-all"
                 style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)' }}>
                 🎒 Pack
               </button>
               <button onClick={() => setShowCompare(true)}
-                className="text-white/60 hover:text-white text-sm font-bold px-4 py-2 rounded-xl transition-all"
+                className="hidden sm:block text-white/60 hover:text-white text-sm font-bold px-4 py-2 rounded-xl transition-all"
                 style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)' }}>
                 ⚖️ Compare
               </button>
               <button onClick={onNewTrip}
-                className="text-sm px-5 py-2 rounded-xl font-black text-white transition-all hover:scale-105"
+                className="text-sm px-4 py-2 rounded-xl font-black text-white transition-all hover:scale-105"
                 style={{ background: 'linear-gradient(135deg,#f59e0b,#ea580c)', boxShadow: '0 0 16px rgba(245,158,11,0.4)' }}>
                 + New Trip
               </button>
@@ -292,17 +308,17 @@ export default function ItineraryResult({ data, onNewTrip }) {
           </div>
 
           {/* Destination name */}
-          <h1 className="font-outfit font-black text-white leading-none mb-5"
-            style={{ fontSize: 'clamp(4rem,10vw,8rem)', textShadow: '0 8px 60px rgba(0,0,0,0.6)' }}>
+          <h1 className="font-outfit font-black text-white leading-none mb-4"
+            style={{ fontSize: 'clamp(2.5rem,10vw,8rem)', textShadow: '0 8px 60px rgba(0,0,0,0.6)' }}>
             {destination}
           </h1>
 
           {itinerary_summary && (
-            <p className="text-white/55 max-w-2xl leading-relaxed text-lg mb-8">{itinerary_summary}</p>
+            <p className="text-white/55 max-w-2xl leading-relaxed text-sm sm:text-lg mb-6 sm:mb-8">{itinerary_summary}</p>
           )}
 
           {/* Info chips */}
-          <div className="flex flex-wrap gap-2 mb-10">
+          <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-6 sm:mb-10">
             {[
               `📅 ${days} Days`,
               `👥 ${num_people} Traveler${num_people > 1 ? 's' : ''}`,
@@ -310,7 +326,7 @@ export default function ItineraryResult({ data, onNewTrip }) {
               `💰 ${fmt(budget_provided)}`,
               weather ? `${weather.icon} ${weather.temperature}°C` : null,
             ].filter(Boolean).map((chip, i) => (
-              <span key={i} className="text-white/75 text-sm font-semibold px-4 py-2 rounded-full"
+              <span key={i} className="text-white/75 text-xs sm:text-sm font-semibold px-3 sm:px-4 py-1.5 sm:py-2 rounded-full"
                 style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.14)' }}>
                 {chip}
               </span>
@@ -341,7 +357,7 @@ export default function ItineraryResult({ data, onNewTrip }) {
       {/* ── ALL CONTENT (over the blurred full-page bg) ─────── */}
       <div className="relative z-10">
         {/* Two-column layout: itinerary left, chatbot right */}
-        <div className="max-w-[1600px] mx-auto px-4 pb-24">
+        <div className="max-w-[1600px] mx-auto px-3 sm:px-4 pb-24">
           <div className="flex gap-6 items-start">
 
             {/* ══ LEFT COLUMN — itinerary content ══════════════════ */}

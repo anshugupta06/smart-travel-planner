@@ -62,19 +62,19 @@ export default function DayPlanCard({ day }) {
             style={{ background: `linear-gradient(90deg, ${theme.from}, ${theme.to}, transparent)` }} />
 
           {/* Day number */}
-          <div className="flex flex-col items-center justify-center px-7 py-6 flex-shrink-0 relative z-10"
-            style={{ minWidth: '90px', borderRight: `1px solid ${theme.accent}20` }}>
+          <div className="flex flex-col items-center justify-center px-4 sm:px-7 py-6 flex-shrink-0 relative z-10"
+            style={{ minWidth: '70px', borderRight: `1px solid ${theme.accent}20` }}>
             <span className="text-[10px] font-black uppercase tracking-[0.2em]" style={{ color: theme.accent + 'aa' }}>DAY</span>
-            <span className="font-outfit font-black leading-none" style={{ fontSize: '3rem', color: theme.accent }}>
+            <span className="font-outfit font-black leading-none" style={{ fontSize: 'clamp(2rem,8vw,3rem)', color: theme.accent }}>
               {day.day}
             </span>
           </div>
 
           {/* Title */}
-          <div className="flex-1 py-6 px-6 flex flex-col justify-center relative z-10">
-            <h3 className="font-outfit font-black text-white text-2xl leading-tight">{label}</h3>
+          <div className="flex-1 py-4 sm:py-6 px-4 sm:px-6 flex flex-col justify-center relative z-10">
+            <h3 className="font-outfit font-black text-white text-lg sm:text-2xl leading-tight">{label}</h3>
             {day.narrative && (
-              <p className="text-white/45 text-sm mt-1.5 line-clamp-1 max-w-lg">{day.narrative}</p>
+              <p className="text-white/45 text-xs sm:text-sm mt-1.5 line-clamp-1 max-w-lg">{day.narrative}</p>
             )}
             <div className="flex flex-wrap items-center gap-2 mt-3">
               {day.places?.length > 0 && (
@@ -109,7 +109,7 @@ export default function DayPlanCard({ day }) {
       {/* ── Body ────────────────────────────────────── */}
       {open && (
         <div className="overflow-hidden">
-          <div className="p-7 space-y-7">
+          <div className="p-4 sm:p-7 space-y-5 sm:space-y-7">
 
             {/* Narrative quote */}
             {day.narrative && (

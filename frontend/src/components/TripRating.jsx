@@ -2,47 +2,67 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { API_BASE } from '../config'
 
+// Fallback: store rating locally when no DB trip ID is available
+// (happens when backend uses ephemeral storage like Railway)
+function getLocalRating(destination) {
+  try { return JSON.parse(localStorage.getItem(`rating_${destination}`) || 'null') } catch { return null }
+}
+function saveLocalRating(destination, rating, review) {
+  localStorage.setItem(`rating_${destination}`, JSON.stringify({ rating, review }))
+}
+
 export default function TripRating({ tripId, destination }) {
   const [rating,    setRating]    = useState(0)
   const [hover,     setHover]     = useState(0)
   const [review,    setReview]    = useState('')
-  const [submitted, setSubmitted] = useState(false)  // permanently true after first save
+  const [submitted, setSubmitted] = useState(false)
   const [loading,   setLoading]   = useState(false)
-  const [dirty,     setDirty]     = useState(false)  // true when user changed rating/review after save
+  const [dirty,     setDirty]     = useState(false)
 
-  // Load existing rating on mount
+  // Load existing rating — from DB if tripId exists, else from localStorage
   useEffect(() => {
-    if (!tripId) return
-    axios.get(`${API_BASE}/api/ratings/${tripId}`)
-      .then(res => {
-        if (res.data.rating) {
-          setRating(res.data.rating)
-          setReview(res.data.review || '')
-          setSubmitted(true)
-        }
-      })
-      .catch(() => {})
-  }, [tripId])
+    if (tripId) {
+      axios.get(`${API_BASE}/api/ratings/${tripId}`)
+        .then(res => {
+          if (res.data.rating) {
+            setRating(res.data.rating)
+            setReview(res.data.review || '')
+            setSubmitted(true)
+          }
+        })
+        .catch(() => {})
+    } else {
+      // Fallback: load from localStorage
+      const local = getLocalRating(destination)
+      if (local?.rating) {
+        setRating(local.rating)
+        setReview(local.review || '')
+        setSubmitted(true)
+      }
+    }
+  }, [tripId, destination])
 
-  const handleStarClick = (star) => {
-    setRating(star)
-    setDirty(true)   // user changed rating — allow re-submit
-  }
-
-  const handleReviewChange = (val) => {
-    setReview(val)
-    setDirty(true)
-  }
+  const handleStarClick = (star) => { setRating(star); setDirty(true) }
+  const handleReviewChange = (val) => { setReview(val); setDirty(true) }
 
   const handleSave = async () => {
-    if (!rating || !tripId) return
+    if (!rating) return
     setLoading(true)
     try {
-      await axios.post(`${API_BASE}/api/ratings`, { trip_id: tripId, rating, review })
+      if (tripId) {
+        // Save to backend DB
+        await axios.post(`${API_BASE}/api/ratings`, { trip_id: tripId, rating, review })
+      } else {
+        // No DB id — save locally
+        saveLocalRating(destination, rating, review)
+      }
       setSubmitted(true)
       setDirty(false)
     } catch {
-      alert('Could not save rating. Please try again.')
+      // Backend failed — still save locally so user gets feedback
+      saveLocalRating(destination, rating, review)
+      setSubmitted(true)
+      setDirty(false)
     } finally {
       setLoading(false)
     }
@@ -108,9 +128,6 @@ export default function TripRating({ tripId, destination }) {
               <span className="w-5 h-5 rounded-full bg-emerald-400 flex items-center justify-center text-[11px] text-white font-black flex-shrink-0">✓</span>
               Rating submitted
             </span>
-          )}
-          {!tripId && (
-            <span className="text-white/25 text-xs">Generate a trip first to rate it</span>
           )}
         </div>
 

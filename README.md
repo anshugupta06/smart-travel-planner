@@ -80,3 +80,4 @@ Gemini LLM (Narrative itinerary generation)
     ▼
 Complete Personalized Itinerary
 ```
+Live demo: https://smart-travel-planner-gules-one.vercel.app
